@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Handtracking Mediapipe Test</title>
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script type="module" src="js/Main.js" defer></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center; /* Centreer horizontaal */
+      align-items: center; /* Centreer verticaal */
+      height: 100vh; /* Neem volledige viewport-hoogte in */
+      background-color: white; /* Achtergrondkleur wit */
+      overflow: hidden; /* Voorkom scrollen */
+    }
+    #container {
+      position: relative; /* Relatieve positionering voor absoluut gepositioneerde elementen */
+      width: 100%; /* Neem volledige breedte in van de viewport */
+      height: 100%; /* Neem volledige hoogte in van de viewport */
+    }
+    #output_canvas {
+      position: absolute; /* Absoluut gepositioneerd */
+      top: 50%; /* Plaats in het midden verticaal */
+      left: 50%; /* Plaats in het midden horizontaal */
+      transform: translate(-50%, -50%); /* Centreer exact in het midden */
+      border: white; /* Witte rand om canvas */
+      width: 1280px; /* Breedte van canvas */
+      height: 720px; /* Hoogte van canvas */
+      z-index: 1; /* Plaats canvas achter video */
+    }
+    #webcam {
+      position: absolute; /* Absoluut gepositioneerd */
+      top: 5px; /* Afstand vanaf de bovenkant */
+      right: 5px; /* Afstand vanaf de rechterkant */
+      border: 2px solid rgb(63, 26, 212); /* Kleur rand om video */
+      z-index: 2; /* Plaats video boven canvas */
+      width: 320px; /* Breedte van video */
+      height: auto; /* Hoogte automatisch aangepast */
+    }
+    #webcamButton {
+      position: absolute; /* Absoluut gepositioneerd */
+      bottom: 20px; /* Afstand vanaf de onderkant */
+      left: 50%; /* Plaats in het midden horizontaal */
+      transform: translateX(-50%); /* Centreer exact horizontaal */
+      padding: 15px 40px; /* Binnenste vulling */
+      background-color: green; /* Achtergrondkleur groen */
+      color: white; /* Tekstkleur wit */
+      font-size: 20px; /* Tekstgrootte */
+      border: none; /* Geen rand */
+      border-radius: 5px; /* Afgeronde hoeken */
+      cursor: pointer; /* Cursor veranderen bij hover */
+      z-index: 3; /* Plaats knop boven video */
+    }
+    .blend-shapes {
+      display: none; /* Blend-shapes standaard verborgen */
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <canvas id="output_canvas" width="1280px" height="720px"></canvas>
+    <video id="webcam" playsinline autoplay></video>
+    <button id="webcamButton"> Webcam inschakelen </button>
+  </div>
+</body>
+</html>
