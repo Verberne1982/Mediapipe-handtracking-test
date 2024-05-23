@@ -26,8 +26,6 @@ Clone the repository to your local machine.
 Open the index.html file in a web browser.
 Click on the "Enable Predictions" button to activate the webcam and start hand tracking.
 Perform hand gestures in front of the webcam to interact with the 3D cube.
-Demo:
-https://www.youtube.com/watch?v=jv3KuXhdcYM
 
 Installation:
 No installation is required. Simply open the index.html file in a web browser with webcam access.
