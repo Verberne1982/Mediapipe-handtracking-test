@@ -4,65 +4,74 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Handtracking Mediapipe Test</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+      }
+    }
+  </script>
   <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
   <script type="module" src="js/Main.js" defer></script>
   <style>
     body {
-      display: flex;
-      justify-content: center; /* Centreer horizontaal */
-      align-items: center; /* Centreer verticaal */
-      height: 100vh; /* Neem volledige viewport-hoogte in */
-      background-color: white; /* Achtergrondkleur wit */
-      overflow: hidden; /* Voorkom scrollen */
-    }
-    #container {
-      position: relative; /* Relatieve positionering voor absoluut gepositioneerde elementen */
-      width: 100%; /* Neem volledige breedte in van de viewport */
-      height: 100%; /* Neem volledige hoogte in van de viewport */
-    }
-    #output_canvas {
-      position: absolute; /* Absoluut gepositioneerd */
-      top: 50%; /* Plaats in het midden verticaal */
-      left: 50%; /* Plaats in het midden horizontaal */
-      transform: translate(-50%, -50%); /* Centreer exact in het midden */
-      border: white; /* Witte rand om canvas */
-      width: 1280px; /* Breedte van canvas */
-      height: 720px; /* Hoogte van canvas */
-      z-index: 1; /* Plaats canvas achter video */
-    }
-    #webcam {
-      position: absolute; /* Absoluut gepositioneerd */
-      top: 5px; /* Afstand vanaf de bovenkant */
-      right: 5px; /* Afstand vanaf de rechterkant */
-      border: 2px solid rgb(63, 26, 212); /* Kleur rand om video */
-      z-index: 2; /* Plaats video boven canvas */
-      width: 320px; /* Breedte van video */
-      height: auto; /* Hoogte automatisch aangepast */
-    }
-    #webcamButton {
-      position: absolute; /* Absoluut gepositioneerd */
-      bottom: 20px; /* Afstand vanaf de onderkant */
-      left: 50%; /* Plaats in het midden horizontaal */
-      transform: translateX(-50%); /* Centreer exact horizontaal */
-      padding: 15px 40px; /* Binnenste vulling */
-      background-color: green; /* Achtergrondkleur groen */
-      color: white; /* Tekstkleur wit */
-      font-size: 20px; /* Tekstgrootte */
-      border: none; /* Geen rand */
-      border-radius: 5px; /* Afgeronde hoeken */
-      cursor: pointer; /* Cursor veranderen bij hover */
-      z-index: 3; /* Plaats knop boven video */
-    }
-    .blend-shapes {
-      display: none; /* Blend-shapes standaard verborgen */
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background-color: rgb(32, 32, 32);
+}
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    object-fit: contain;
+}
+h1 {
+    text-align: center;
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
+#webcam{
+    border: 2px solid red;
+    width: 400px;
+    height: 300px !important;
+    transform: scaleX(-1);
+}
+#output_canvas {
+    border: 2px solid blue;
+    width: 400px;
+    height: 300px !important;
+    transform: scaleX(-1);
+    /* z-index: 4; */
+}
+  #ThreeJS_output {
+    border: 2px solid yellow;
+    width: 400px;
+    height: 300px !important;
+    transform: scaleX(-1); /* Spiegel de Three.js canvas */
+}
+#webcamButton {
+    margin-top: 40px;
+    padding: 15px 40px;
+    background-color: green;
+    color: white;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    /* z-index: 5; */
+}
   </style>
 </head>
 <body>
   <div id="container">
-    <canvas id="output_canvas" width="1280px" height="720px"></canvas>
+    <canvas id="ThreeJS_output" width="400px" height="300px"></canvas>
+    <canvas id="output_canvas" width="400px" height="300px"></canvas>
     <video id="webcam" playsinline autoplay></video>
     <button id="webcamButton"> Webcam inschakelen </button>
   </div>
