@@ -1,37 +1,132 @@
-Description:
+# Motion Tracking Library
+Deze bibliotheek maakt gebruik van MediaPipe's PoseLandmarker voor real-time pose tracking met behulp van een webcam. Hieronder vind je instructies om aan de slag te gaan met de bibliotheek en enkele voorbeelden van mogelijke toepassingen.
 
-This project demonstrates hand tracking using MediaPipe, a robust framework for building perception pipelines, and Three.js, a lightweight 3D library. The application enables users to track their hand movements in real-time through their webcam feed and interact with a 3D cube displayed on the screen.
+## Installatie
+Voeg de bibliotheek toe aan je project met behulp van een scripttag:
 
-Features:
+```html
+<script type="module">
+  import {
+    PoseLandmarker,
+    FilesetResolver,
+    DrawingUtils
+  } from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.0";
+</script>
+```
 
-Real-time hand tracking using MediaPipe Hands model.
-Interaction with a 3D cube based on hand movements:
-Pinch detection for rotation.
-Fist detection for scaling.
-Thumbs-up gesture detection for color change.
-Mirror effect for the webcam feed.
-Responsive design for various screen sizes.
+## Gebruik
+Initialisatie van PoseLandmarker:
 
-Technologies Used:
+Voordat je pose tracking kunt uitvoeren, moet je de PoseLandmarker initialiseren met de gewenste opties. Zorg ervoor dat je de FilesetResolver gebruikt om visuele taken te laden:
 
-JavaScript
-HTML
-CSS
-MediaPipe
-Three.js
+```javascript
+const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm");
+const poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
+  baseOptions: {
+    modelAssetPath: `./models/pose_landmarker_full.task`,
+    delegate: "GPU",
+  },
+  runningMode: "VIDEO",
+  numPoses: 2,
+});
+```
 
-How to Use:
+## Webcam Activeren:
 
-Clone the repository to your local machine.
-Open the index.html file in a web browser.
-Click on the "Enable Predictions" button to activate the webcam and start hand tracking.
-Perform hand gestures in front of the webcam to interact with the 3D cube.
+Voeg een HTML-button toe om de webcam te activeren en pose tracking te starten:
 
-Installation:
-No installation is required. Simply open the index.html file in a web browser with webcam access.
+```html
+<button id="webcamButton">Start Webcam</button>
+<video id="webcam" autoplay playsinline></video>
+<canvas id="output_canvas"></canvas>
+<canvas id="ThreeJS_output"></canvas>
 
-Contribution Guidelines:
-Fork the repository.
-Make your changes in a new branch.
-Submit a pull request with a clear description of the changes made.
+<script>
+const enableWebcamButton = document.getElementById("webcamButton");
+enableWebcamButton.addEventListener("click", enableCam);
+</script>
+
+```
+## Pose Tracking Starten:
+
+Zodra de webcam is gestart, kun je pose tracking starten en visuele feedback weergeven:
+
+```javascript
+async function enableCam() {
+  const videoElement = document.getElementById('webcam');
+  const canvasElement = document.getElementById('output_canvas');
+
+  // Activeer de webcam en stel videoElement in
+  const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+  videoElement.srcObject = stream;
+
+  // Start pose tracking
+  await predictWebcam(videoElement, canvasElement);
+}
+
+async function predictWebcam(videoElement, canvasElement) {
+  const ctx = canvasElement.getContext('2d');
+  const results = await poseLandmarker.estimatePoses(videoElement);
+
+  // Verwerk de resultaten en voer acties uit op basis van de pose data
+  results.forEach(pose => {
+    // Voer hier verdere verwerking uit, zoals het aanpassen van 3D objecten
+    // gebaseerd op pose landmarks
+  });
+
+  requestAnimationFrame(() => predictWebcam(videoElement, canvasElement));
+}
+```
+
+## Voorbeelden van Functionaliteit
+### Update van Kubuspositie
+
+Gebruik handlandmarks om de positie van een 3D-object, zoals een kubus, dynamisch bij te werken.
+```javascript
+function updateCubePositionX(landmarks) {
+  // Implementatie om positie langs x-as te updaten op basis van handlandmarks
+}
+```
+### Schaal aanpassen
+Pas de schaal van een 3D-object aan op basis van de afstand tussen specifieke handlandmarks.
+
+```javascript
+function cubeScaling(landmarks) {
+  // Implementatie om schaal van een kubus aan te passen op basis van handlandmarks
+}
+```
+
+### Hoogte aanpassen
+Pas de hoogte van een kubus aan op basis van handlandmarks.
+
+```javascript
+function cubeJump(landmarks) {
+  // Implementatie om hoogte van een kubus aan te passen op basis van handlandmarks
+}
+```
+
+### Actie detecteren
+Detecteer een specifiek handgebaar, zoals een vuist, en voer een bijbehorende actie uit.
+
+```javascript
+function detectAction(landmarks) {
+  // Implementatie om een actie uit te voeren bij detectie van een handgebaar (bijv. vuist)
+}
+```
+
+### Interactie detecteren
+Start of stop de rotatie van een kubus op basis van handlandmarks.
+
+```javascript
+function detectInteraction(landmarks) {
+  // Implementatie om rotatie van een kubus te starten of stoppen op basis van handlandmarks
+}
+```
+  
+## Bijdragen
+Bijdragen aan deze bibliotheek zijn welkom. Zorg ervoor dat je nieuwe functies toevoegt volgens de SOLID principes en OOP richtlijnen voor een gestructureerde en onderhoudbare codebase.
+
+## Bronnen
+- https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker
+- https://threejs.org/
 
